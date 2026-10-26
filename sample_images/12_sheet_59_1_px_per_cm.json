@@ -1,0 +1,9 @@
+{
+  "image_filename": "12_sheet_59_1_px_per_cm.png",
+  "description": "Issue E sheet at 59.100 px/cm with blue 2cm square, extra red 2cm square, and 10x10cm green square (100 cm^2)",
+  "calib_color": "blue",
+  "calib_side_cm": 2.0,
+  "true_px_per_cm": 59.1,
+  "true_area_cm2": 100.0,
+  "true_leaf_count": 1
+}

@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="application-name" content="LeafArea &amp; LAI Analyzer" />
+  <meta name="theme-color" content="#2F7D4F" id="metaThemeColor" />
+  <title>Leaf Area &amp; LAI Analyzer</title>
+  <link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <rect width="24" height="24" rx="6" fill="currentColor" fill-opacity="0.14" />
+            <path d="M18.5 5.5C12.5 5.5 7 9.2 6.2 16.2C7.8 17 13.8 17 17.6 12.4C19.2 10.1 18.9 7 18.5 5.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+            <path d="M6 18C9.2 14 13 10.5 17.5 7.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
+        </span>
+        <span class="brand-title">Leaf Area &amp; LAI Analyzer</span>
+        <span id="appVersionBadge" class="version-badge">v1.5.6</span>
+      </div>
+
+      <nav class="topbar-actions" aria-label="Application controls">
+        <button type="button" id="btnOpenHelp" class="topbar-btn" aria-haspopup="dialog" aria-controls="helpDrawer" aria-expanded="false">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+          <span>How to photograph</span>
+        </button>
+
+        <div class="dropdown-wrap" id="calibDropdownWrap">
+          <button type="button" id="btnCalibSheets" class="topbar-btn" aria-haspopup="true" aria-expanded="false" aria-controls="calibSheetsMenu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <rect x="8" y="12" width="6" height="6" rx="1"/>
+            </svg>
+            <span>Calibration sheets</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div id="calibSheetsMenu" class="dropdown-menu hidden" role="menu" aria-label="Printable A4 calibration sheets">
+            <div class="dropdown-header">Print at 100% scale (Actual Size) on A4 paper</div>
+            <div class="dropdown-item-group">
+              <div class="dropdown-item-title">
+                <span class="swatch-dot swatch-blue" aria-hidden="true"></span>
+                <div>
+                  <strong>Blue 2.00 cm sheet</strong>
+                  <small>Standard sheet for green leaves</small>
+                </div>
+              </div>
+              <div class="dropdown-item-links">
+                <a href="/static/calibration_sheet_a4.pdf" target="_blank" rel="noopener" class="chip-link" role="menuitem">Open PDF</a>
+                <a href="/static/calibration_sheet_a4.pdf" download="calibration_sheet_a4.pdf" class="chip-link" role="menuitem">Download</a>
+              </div>
+            </div>
+            <div class="dropdown-item-group">
+              <div class="dropdown-item-title">
+                <span class="swatch-dot swatch-red" aria-hidden="true"></span>
+                <div>
+                  <strong>Red 2.00 cm sheet</strong>
+                  <small>Alternative reference square</small>
+                </div>
+              </div>
+              <div class="dropdown-item-links">
+                <a href="/static/calibration_sheet_a4_red.pdf" target="_blank" rel="noopener" class="chip-link" role="menuitem">Open PDF</a>
+                <a href="/static/calibration_sheet_a4_red.pdf" download="calibration_sheet_a4_red.pdf" class="chip-link" role="menuitem">Download</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" id="btnThemeToggle" class="topbar-btn icon-only-sm" title="Switch light / dark theme" aria-label="Switch light or dark theme">
+          <svg id="iconThemeSun" class="hidden" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg id="iconThemeMoon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+          <span id="themeToggleLabel" class="sr-only">Theme</span>
+        </button>
+
+        <button type="button" id="btnQuitApp" class="topbar-btn topbar-btn-quit" title="Stop local analyzer server and close window">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18.36 6.64a9 9 0 1 1-12.73 0"/>
+            <line x1="12" y1="2" x2="12" y2="12"/>
+          </svg>
+          <span>Quit</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-main">
+    <!-- Hero / Upload Card (max-width 960px, centered above the fold) -->
+    <section class="hero-section" aria-label="Upload leaf photographs">
+      <p class="hero-tagline">Measure leaf area and LAI from a photo in seconds.</p>
+
+      <div class="upload-card">
+        <div id="dropZone" class="drop-zone" tabindex="0" role="button" aria-label="Drop your leaf photos here or browse files">
+          <input type="file" id="fileInput" name="files" multiple accept=".jpg,.jpeg,.png,.tif,.tiff,image/jpeg,image/png,image/tiff" />
+          <div class="drop-zone-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+          </div>
+          <div class="drop-zone-title">
+            Drop your leaf photos here <span class="drop-zone-browse">or browse files</span>
+          </div>
+          <div class="drop-zone-sub">
+            JPG, PNG or TIFF, full resolution, at least 800 &times; 800 px
+          </div>
+        </div>
+
+        <!-- Selected Files Thumbnails -->
+        <div id="selectedFilesPanel" class="selected-files-panel hidden" aria-live="polite">
+          <div class="selected-files-header">
+            <span id="selectedFilesCount" class="selected-files-count">1 photo selected</span>
+            <div class="selected-files-actions">
+              <button type="button" id="btnAddMoreFiles" class="text-link-btn">+ Add more photos</button>
+              <button type="button" id="btnClearFiles" class="text-link-btn danger-link">Clear all</button>
+            </div>
+          </div>
+          <div id="fileThumbList" class="file-thumb-grid"></div>
+        </div>
+
+        <!-- Upload Card Footer: Try a sample + quick calibration reminder -->
+        <div class="upload-card-footer">
+          <div class="sample-picker-wrap">
+            <button type="button" id="btnTrySample" class="sample-trigger-link" aria-expanded="false" aria-controls="sampleMenu">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+              <span>Try a sample photo</span>
+            </button>
+            <div id="sampleMenu" class="sample-menu hidden" role="menu" aria-label="Built-in sample images">
+              <button type="button" class="sample-option" data-sample-file="01_clean_standard.png" data-sample-color="blue" role="menuitem">
+                <strong>Standard 4-leaf sample</strong>
+                <span>Blue 2.00 cm square &middot; True area 48.05 cm&sup2;</span>
+              </button>
+              <button type="button" class="sample-option" data-sample-file="12_sheet_59_1_px_per_cm.png" data-sample-color="blue" role="menuitem">
+                <strong>Printed calibration sheet (59.10 px/cm)</strong>
+                <span>Blue + extra red square ignored &middot; True area 100.00 cm&sup2;</span>
+              </button>
+              <button type="button" class="sample-option" data-sample-file="02_leaf_with_hole.png" data-sample-color="blue" role="menuitem">
+                <strong>Leaf with interior hole</strong>
+                <span>Hole subtracted automatically &middot; True area 21.23 cm&sup2;</span>
+              </button>
+              <button type="button" class="sample-option" data-sample-file="11_red_elliptical_leaf.png" data-sample-color="blue" role="menuitem">
+                <strong>Red / variegated elliptical leaf</strong>
+                <span>Non-square red leaf preserved &middot; True area 3.57 cm&sup2;</span>
+              </button>
+              <button type="button" class="sample-option" data-sample-file="06_rotated_image.png" data-sample-color="blue" role="menuitem">
+                <strong>Rotated leaf orientation test</strong>
+                <span>Orientation-invariant contour area &middot; True area 48.05 cm&sup2;</span>
+              </button>
+            </div>
+          </div>
+
+          <span class="upload-footer-note">
+            Include one 2.00 cm calibration square in the frame (<button type="button" id="btnInlineHelpLink" class="inline-link-btn">photo guide</button>)
+          </span>
+        </div>
+      </div>
+
+      <!-- Collapsible Settings Row -->
+      <div class="settings-section">
+        <div class="settings-bar">
+          <button type="button" id="btnToggleSettings" class="settings-toggle-btn" aria-expanded="true" aria-controls="settingsGridWrap">
+            <span class="settings-toggle-left">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+              <span class="settings-toggle-title">Measurement settings</span>
+              <span id="settingsSummaryPill" class="settings-summary-pill">2.00 cm blue square, leaf area only</span>
+            </span>
+            <span class="settings-chevron" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </span>
+          </button>
+        </div>
+
+        <div id="settingsGridWrap" class="settings-grid">
+          <!-- Card 1: Calibration square -->
+          <div class="settings-card">
+            <h2 class="settings-card-title">Calibration square</h2>
+            <div class="field-row">
+              <div class="field-group">
+                <label for="calibration_side_cm">Side length (cm)</label>
+                <input type="number" id="calibration_side_cm" name="calibration_side_cm" value="2.00" step="0.01" min="0.1" max="50" />
+                <span class="field-hint">Printed reference square edge length (default 2.00 cm).</span>
+              </div>
+
+              <div class="field-group">
+                <label id="calibColorGroupLabel" for="calibration_color">Square colour</label>
+                <div class="swatch-selector" role="radiogroup" aria-labelledby="calibColorGroupLabel">
+                  <button type="button" class="swatch-btn active" data-color="blue" role="radio" aria-checked="true">
+                    <span class="swatch-dot swatch-blue" aria-hidden="true"></span>
+                    <span>Blue</span>
+                  </button>
+                  <button type="button" class="swatch-btn" data-color="red" role="radio" aria-checked="false">
+                    <span class="swatch-dot swatch-red" aria-hidden="true"></span>
+                    <span>Red</span>
+                  </button>
+                </div>
+                <select id="calibration_color" name="calibration_color" class="sr-only" aria-label="Calibration square colour">
+                  <option value="blue" selected>Blue</option>
+                  <option value="red">Red</option>
+                </select>
+                <span class="field-hint">Keep any unused calibration sheet out of the photo.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Leaf Area Index (optional) -->
+          <div class="settings-card">
+            <h2 class="settings-card-title">Leaf Area Index (optional)</h2>
+            <div class="field-group">
+              <label id="laiModeGroupLabel" for="lai_mode">Calculation mode</label>
+              <div class="segmented-control" role="radiogroup" aria-labelledby="laiModeGroupLabel">
+                <button type="button" class="segment-btn active" data-lai-mode="none" role="radio" aria-checked="true">
+                  Leaf area only
+                </button>
+                <button type="button" class="segment-btn" data-lai-mode="mode_1" role="radio" aria-checked="false">
+                  Ground area
+                </button>
+                <button type="button" class="segment-btn" data-lai-mode="mode_2" role="radio" aria-checked="false">
+                  Plants &times; area per plant
+                </button>
+              </div>
+              <select id="lai_mode" name="lai_mode" class="sr-only" aria-label="LAI calculation mode">
+                <option value="none" selected>Leaf area only</option>
+                <option value="mode_1">Ground area</option>
+                <option value="mode_2">Plants x area per plant</option>
+              </select>
+            </div>
+
+            <div id="laiNoneHint" class="lai-mode-panel">
+              <p class="field-hint">Measures one-sided surface area (cm&sup2;) for every leaf and the batch total without dividing by ground area.</p>
+            </div>
+
+            <div id="laiMode1Fields" class="lai-mode-panel hidden">
+              <div class="field-group">
+                <label for="ground_area_m2">Ground area (m&sup2;)</label>
+                <input type="number" id="ground_area_m2" name="ground_area_m2" step="0.0001" min="0.0001" placeholder="e.g. 0.25" />
+                <span class="field-hint">Ground area covered by the sampled leaves (LAI = leaf area in m&sup2; &divide; ground area in m&sup2;).</span>
+              </div>
+            </div>
+
+            <div id="laiMode2Fields" class="lai-mode-panel hidden">
+              <div class="field-row">
+                <div class="field-group">
+                  <label for="num_plants">Number of plants</label>
+                  <input type="number" id="num_plants" name="num_plants" step="1" min="1" placeholder="e.g. 4" />
+                  <span class="field-hint">Plants harvested for this sample.</span>
+                </div>
+                <div class="field-group">
+                  <label for="area_per_plant_m2">Area per plant (m&sup2;)</label>
+                  <input type="number" id="area_per_plant_m2" name="area_per_plant_m2" step="0.0001" min="0.0001" placeholder="e.g. 0.05" />
+                  <span class="field-hint">Canopy ground footprint of one plant.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Primary Action Button -->
+      <div class="primary-action-wrap">
+        <button type="button" id="btnAnalyze" class="btn-analyze" disabled>
+          <span id="analyzeSpinner" class="spinner hidden" aria-hidden="true"></span>
+          <span id="analyzeBtnText">Analyze</span>
+        </button>
+      </div>
+
+      <!-- Progress / Error / Manual Scale Banners -->
+      <div id="statusBanner" class="status-banner hidden" role="status" aria-live="polite"></div>
+      <div id="errorBanner" class="error-banner hidden" role="alert"></div>
+
+      <!-- Method C: Manual Scale Fallback -->
+      <div id="manualScalePrompt" class="manual-scale-card hidden" role="region" aria-label="Manual scale calibration fallback">
+        <div class="manual-scale-header">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <div>
+            <strong>Calibration square not detected</strong>
+            <p>Retake the photo with a 2.00 cm calibration square on white paper, or enter a known scale below to measure with low-confidence fallback.</p>
+          </div>
+        </div>
+        <div class="manual-scale-controls">
+          <div class="field-group">
+            <label for="manual_px_per_cm">Known scale (pixels per cm)</label>
+            <input type="number" id="manual_px_per_cm" name="manual_px_per_cm" step="0.1" min="1" placeholder="e.g. 100.0" />
+          </div>
+          <button type="button" id="btnRerunManual" class="btn-secondary">Re-run with manual scale</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results Section (appears below after analysis, replaces nothing above) -->
+    <section id="resultsSection" class="results-section hidden" role="region" aria-label="Measurement results">
+      <!-- Results Top Bar: Scale Line + Export Buttons -->
+      <div class="results-header-bar">
+        <div class="results-title-group">
+          <h2 class="results-heading">Measurement results</h2>
+          <p id="resCalibLine" class="calibration-line" role="status">Scale 100.00 px/cm (calibration square detected)</p>
+        </div>
+        <div class="export-actions">
+          <button type="button" id="btnCopySummary" class="btn-export">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            <span id="copySummaryText">Copy summary</span>
+          </button>
+          <a id="btnExportCsv" href="#" class="btn-export" download>
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span>Download CSV</span>
+          </a>
+          <a id="btnExportXlsx" href="#" class="btn-export btn-export-primary" download>
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="8" y1="13" x2="16" y2="13"/>
+              <line x1="8" y1="17" x2="16" y2="17"/>
+            </svg>
+            <span>Download Excel</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 4 Equal-Size Stat Cards -->
+      <div class="stat-cards-grid">
+        <div class="stat-card">
+          <span class="stat-label">Total leaf area</span>
+          <div id="resTotalArea" class="stat-number">0.00 cm&sup2;</div>
+          <div id="resUncertainty" class="stat-meta">&plusmn; 0.00 cm&sup2; (0.00%)</div>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-label">Number of leaves</span>
+          <div id="resLeafCount" class="stat-number">0</div>
+          <div id="resLeafSub" class="stat-meta">Detected in sample</div>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-label">Leaf Area Index (LAI)</span>
+          <div id="resLai" class="stat-number">&mdash;</div>
+          <div id="resLaiSub" class="stat-meta">Leaf area only</div>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-label">Confidence</span>
+          <div class="stat-badge-wrap">
+            <span id="resConfidenceBadge" class="confidence-pill confidence-high">High</span>
+          </div>
+          <div id="resCalibDetail" class="stat-meta">Calibration square</div>
+        </div>
+      </div>
+
+      <!-- Image Tabs (for multi-image batches) -->
+      <div id="imageTabsWrap" class="image-tabs-wrap hidden">
+        <div id="imageTabs" class="image-tabs" role="tablist" aria-label="Analyzed images"></div>
+      </div>
+
+      <!-- Warnings / Quality Check Callout -->
+      <div id="warningsBox" class="warnings-container" role="status" aria-live="polite"></div>
+
+      <!-- Image Comparison Card -->
+      <div class="comparison-card">
+        <div class="comparison-header">
+          <div>
+            <h3 id="currentImageTitle" class="comparison-title">Image inspection</h3>
+            <p id="currentImageMeta" class="comparison-sub">Click any image to open full-screen zoom and pan</p>
+          </div>
+          <div class="comparison-controls">
+            <div class="view-mode-toggle" role="group" aria-label="Image comparison mode">
+              <button type="button" class="view-mode-btn active" data-view-mode="side-by-side">Side by side</button>
+              <button type="button" class="view-mode-btn" data-view-mode="slider">Before / After slider</button>
+              <button type="button" class="view-mode-btn" data-view-mode="overlay">Overlay only</button>
+            </div>
+            <button type="button" id="btnOpenZoom" class="btn-zoom-trigger" title="Inspect leaf edges in full-screen zoom">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                <line x1="11" y1="8" x2="11" y2="14"/>
+                <line x1="8" y1="11" x2="14" y2="11"/>
+              </svg>
+              <span>Zoom</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mode 1: Side-by-Side Equal Height -->
+        <div id="viewSideBySide" class="comparison-side-by-side">
+          <figure class="image-pane">
+            <figcaption class="pane-caption">
+              <span>Original photo</span>
+              <span class="pane-zoom-hint">Click to zoom</span>
+            </figcaption>
+            <div class="pane-img-box" id="boxOrigImg" tabindex="0" role="button" aria-label="Zoom original photo">
+              <img id="origPreviewImg" alt="Original uploaded leaf photo" />
+            </div>
+          </figure>
+
+          <figure class="image-pane">
+            <figcaption class="pane-caption">
+              <span>Measured segmentation overlay</span>
+              <span class="pane-zoom-hint">Click to zoom</span>
+            </figcaption>
+            <div class="pane-img-box" id="boxOverlayImg" tabindex="0" role="button" aria-label="Zoom measured segmentation overlay">
+              <img id="overlayPreviewImg" alt="Segmented leaf measurement overlay" />
+            </div>
+          </figure>
+        </div>
+
+        <!-- Mode 2: Before / After Interactive Slider -->
+        <div id="viewSlider" class="comparison-slider-wrap hidden">
+          <div class="slider-stage" id="sliderStage">
+            <img id="sliderOverlayImg" class="slider-img-base" alt="Segmented overlay" />
+            <div id="sliderClipBefore" class="slider-clip-before">
+              <img id="sliderOrigImg" class="slider-img-before" alt="Original photo" />
+            </div>
+            <div id="sliderDivider" class="slider-divider" aria-hidden="true">
+              <div class="slider-handle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 18 9 12 15 6"/>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </div>
+            </div>
+            <span class="slider-tag slider-tag-left">Original</span>
+            <span class="slider-tag slider-tag-right">Overlay</span>
+          </div>
+          <div class="slider-range-bar">
+            <label for="compareSlider">Original vs. overlay split</label>
+            <input type="range" id="compareSlider" min="0" max="100" value="50" />
+          </div>
+        </div>
+
+        <!-- Mode 3: Single Overlay View -->
+        <div id="viewOverlayOnly" class="comparison-single-wrap hidden">
+          <div class="pane-img-box pane-img-box-large" id="boxSingleOverlay" tabindex="0" role="button" aria-label="Zoom measured overlay">
+            <img id="singleOverlayImg" alt="Segmented leaf measurement overlay" />
+          </div>
+        </div>
+
+        <div class="overlay-legend">
+          <span class="legend-item"><i class="legend-swatch legend-calib"></i> Calibration square</span>
+          <span class="legend-item"><i class="legend-swatch legend-leaf"></i> Leaf boundary</span>
+          <span class="legend-item"><i class="legend-swatch legend-hole"></i> Interior hole (excluded)</span>
+          <span class="legend-item"><i class="legend-swatch legend-border"></i> Possible touching warning</span>
+        </div>
+      </div>
+
+      <!-- Per-Leaf Measurements Table -->
+      <div class="table-card">
+        <div class="table-card-header">
+          <h3 class="comparison-title">Per-leaf measurements</h3>
+          <span id="tableSummaryNote" class="comparison-sub">Net area excludes interior holes</span>
+        </div>
+        <div class="table-scroll">
+          <table id="leafTable" class="leaf-table">
+            <thead>
+              <tr>
+                <th>Leaf #</th>
+                <th class="num">Area (cm&sup2;)</th>
+                <th class="num">Pixels (px)</th>
+                <th class="num">Length (cm)</th>
+                <th class="num">Width (cm)</th>
+                <th class="num">Perimeter (cm)</th>
+                <th class="num">Aspect ratio</th>
+                <th class="num">Solidity</th>
+                <th class="num">Centroid (x, y)</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="leafTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Help Slide-Over Drawer ("How to photograph") -->
+  <div id="helpDrawerBackdrop" class="drawer-backdrop hidden" aria-hidden="true"></div>
+  <aside id="helpDrawer" class="help-drawer hidden" role="dialog" aria-modal="true" aria-labelledby="helpDrawerTitle">
+    <div class="drawer-header">
+      <div>
+        <span class="accuracy-badge">Required for 1% accuracy</span>
+        <h2 id="helpDrawerTitle" class="drawer-title">How to photograph leaves</h2>
+      </div>
+      <button type="button" id="btnCloseHelp" class="icon-close-btn" aria-label="Close photography guide">&times;</button>
+    </div>
+
+    <div class="drawer-body">
+      <div class="guide-steps">
+        <!-- Step 1 -->
+        <div class="guide-step">
+          <div class="guide-illustration" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
+              <rect x="10" y="8" width="44" height="48" rx="4" fill="#FFFFFF" stroke="#2F7D4F" stroke-width="2"/>
+              <path d="M38 22C29 22 22 28 21 38C25 39 33 39 38 32C40 28 39 24 38 22Z" fill="#2F7D4F" fill-opacity="0.22" stroke="#2F7D4F" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="guide-step-text">
+            <h3>1. Plain matte white paper</h3>
+            <p>Place leaves on a clean A4 or Letter matte white sheet or flatbed scanner glass. Avoid textured cloth, wood, or glossy surfaces.</p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="guide-step">
+          <div class="guide-illustration" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
+              <rect x="8" y="10" width="48" height="44" rx="4" fill="#FFFFFF" stroke="#2F7D4F" stroke-width="2"/>
+              <ellipse cx="23" cy="32" rx="7" ry="11" fill="#2F7D4F" fill-opacity="0.22" stroke="#2F7D4F" stroke-width="2"/>
+              <ellipse cx="41" cy="32" rx="7" ry="11" fill="#2F7D4F" fill-opacity="0.22" stroke="#2F7D4F" stroke-width="2"/>
+              <line x1="32" y1="18" x2="32" y2="46" stroke="#5B6B62" stroke-width="1.5" stroke-dasharray="3 3"/>
+            </svg>
+          </div>
+          <div class="guide-step-text">
+            <h3>2. Press leaves flat &amp; separated</h3>
+            <p>Flatten curled leaves (under clear non-glare glass if needed) and leave a small gap between leaves so blades and petioles do not overlap.</p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="guide-step">
+          <div class="guide-illustration" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
+              <rect x="8" y="10" width="48" height="44" rx="4" fill="#FFFFFF" stroke="#2F7D4F" stroke-width="2"/>
+              <rect x="14" y="16" width="12" height="12" rx="1.5" fill="#2563EB"/>
+              <path d="M44 26C36 26 30 31 29 40C33 41 40 41 44 35C46 31 45 28 44 26Z" fill="#2F7D4F" fill-opacity="0.22" stroke="#2F7D4F" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="guide-step-text">
+            <h3>3. One 2.00 cm calibration square</h3>
+            <p>Place the printed 2.00 cm square flat in the frame on the same plane as the leaves. <strong>Use only one calibration square per photo, and keep the other sheet's square out of the frame.</strong></p>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="guide-step">
+          <div class="guide-illustration" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
+              <rect x="20" y="8" width="24" height="14" rx="3" stroke="#2F7D4F" stroke-width="2"/>
+              <circle cx="32" cy="15" r="3.5" stroke="#2F7D4F" stroke-width="2"/>
+              <line x1="32" y1="24" x2="32" y2="46" stroke="#2F7D4F" stroke-width="2" stroke-dasharray="3 3"/>
+              <rect x="12" y="48" width="40" height="6" rx="2" fill="#2F7D4F" fill-opacity="0.22" stroke="#2F7D4F" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="guide-step-text">
+            <h3>4. Camera straight above (nadir view)</h3>
+            <p>Hold the camera directly overhead (within 15&deg; of vertical) in diffuse, even lighting. Save at full resolution (at least 800 &times; 800 px).</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="drawer-sheets-box">
+        <h3>Printable A4 calibration sheets</h3>
+        <p>Print at <strong>100% scale (Actual Size)</strong> and verify the 10.00 cm scale bar with a ruler before use.</p>
+        <div class="drawer-sheet-buttons">
+          <a href="/static/calibration_sheet_a4.pdf" target="_blank" rel="noopener" class="btn-sheet">
+            <span class="swatch-dot swatch-blue" aria-hidden="true"></span>
+            <span>Blue 2.00 cm sheet (PDF)</span>
+          </a>
+          <a href="/static/calibration_sheet_a4_red.pdf" target="_blank" rel="noopener" class="btn-sheet">
+            <span class="swatch-dot swatch-red" aria-hidden="true"></span>
+            <span>Red 2.00 cm sheet (PDF)</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Full-Screen Zoom & Pan Lightbox Modal -->
+  <div id="lightboxModal" class="lightbox-modal hidden" role="dialog" aria-modal="true" aria-labelledby="lightboxTitle">
+    <div class="lightbox-topbar">
+      <div class="lightbox-title-wrap">
+        <span id="lightboxTitle" class="lightbox-title">Edge inspection</span>
+        <span class="lightbox-hint">Scroll to zoom &middot; Drag to pan &middot; Press Esc to close</span>
+      </div>
+      <div class="lightbox-controls">
+        <div class="view-mode-toggle" role="group" aria-label="Lightbox image layer">
+          <button type="button" id="btnLbOverlay" class="view-mode-btn active">Overlay</button>
+          <button type="button" id="btnLbOriginal" class="view-mode-btn">Original</button>
+        </div>
+        <button type="button" id="btnZoomOut" class="lb-ctrl-btn" aria-label="Zoom out">&minus;</button>
+        <span id="zoomLevelLabel" class="zoom-level-label">100%</span>
+        <button type="button" id="btnZoomIn" class="lb-ctrl-btn" aria-label="Zoom in">+</button>
+        <button type="button" id="btnZoomReset" class="lb-ctrl-btn">Fit</button>
+        <button type="button" id="btnCloseLightbox" class="lb-ctrl-btn lb-close-btn" aria-label="Close zoom inspector">&times;</button>
+      </div>
+    </div>
+    <div id="lightboxViewport" class="lightbox-viewport">
+      <img id="lightboxImg" alt="Zoomed leaf inspection view" draggable="false" />
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-inner">
+      <span>LeafArea &amp; LAI Analyzer <strong id="footerVersion">v1.5.6</strong></span>
+      <span class="footer-dot" aria-hidden="true">&middot;</span>
+      <span>Runs entirely on your computer. Your images never leave it.</span>
+      <span class="footer-dot" aria-hidden="true">&middot;</span>
+      <a href="/api/logs/latest" target="_blank" rel="noopener" class="footer-link">Application log</a>
+    </div>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

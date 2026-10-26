@@ -1,0 +1,22 @@
+{
+  "image_filename": "08_yellow_brown_leaves.png",
+  "description": "Combination of healthy green, senescent yellow, and dry brown leaves",
+  "width_px": 3000,
+  "height_px": 2000,
+  "true_px_per_cm": 100.0,
+  "calib_side_cm": 2.0,
+  "calib_color": "blue",
+  "true_leaf_count": 3,
+  "true_total_pixels": 346931,
+  "true_area_cm2": 34.6931,
+  "per_leaf_areas_px": [
+    116723,
+    127787,
+    102421
+  ],
+  "per_leaf_areas_cm2": [
+    11.6723,
+    12.7787,
+    10.2421
+  ]
+}

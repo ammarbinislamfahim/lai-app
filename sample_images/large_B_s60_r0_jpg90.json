@@ -1,0 +1,19 @@
+{
+  "case_id": "B",
+  "description": "Case B: 3, 5, 7 cm wide leaves at 60 px/cm, rot 0 deg (JPEG90 + blur sigma 0.8 + sensor noise)",
+  "width_px": 1920,
+  "height_px": 1920,
+  "true_px_per_cm": 60.0,
+  "calib_side_cm": 2.0,
+  "calib_color": "blue",
+  "angle_deg": 0.0,
+  "degraded": true,
+  "true_leaf_count": 3,
+  "true_area_cm2": 115.4535300194249,
+  "per_leaf_areas_cm2": [
+    14.137166941154069,
+    35.34291735288517,
+    65.97344572538566
+  ],
+  "image_filename": "large_B_s60_r0_jpg90.jpg"
+}

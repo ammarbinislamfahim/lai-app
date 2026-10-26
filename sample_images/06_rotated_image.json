@@ -1,0 +1,24 @@
+{
+  "image_filename": "06_rotated_image.png",
+  "description": "Calibration square and leaves rotated by 7 degrees",
+  "width_px": 3000,
+  "height_px": 2000,
+  "true_px_per_cm": 100.0,
+  "calib_side_cm": 2.0,
+  "calib_color": "blue",
+  "true_leaf_count": 4,
+  "true_total_pixels": 480483,
+  "true_area_cm2": 48.0483,
+  "per_leaf_areas_px": [
+    120004,
+    101772,
+    114771,
+    143936
+  ],
+  "per_leaf_areas_cm2": [
+    12.0004,
+    10.1772,
+    11.4771,
+    14.3936
+  ]
+}

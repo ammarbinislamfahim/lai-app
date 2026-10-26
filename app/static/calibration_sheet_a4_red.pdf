@@ -1,0 +1,42 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Length 854 >>
+stream
+q
+BT /F1 15 Tf 56.69 785 Td (Printable A4 Calibration Sheet (Red 2.00 cm Square)) Tj ET
+BT /F1 10 Tf 56.69 764 Td (IMPORTANT: Print at 100% Actual Size / Scale = None. Do NOT select 'Fit to Page'.) Tj ET
+BT /F1 10 Tf 56.69 748 Td (Verify with a millimeter ruler that the reference square measures 2.00 cm x 2.00 cm.) Tj ET
+BT /F1 10 Tf 56.69 732 Td (Use only one calibration square per photo, and keep the other sheet's square out of the frame.) Tj ET
+0.840 0.100 0.100 rg 56.6929 630.0000 m 85.0393 630.0000 l 113.3858 630.0000 l 113.3858 686.6929 l 56.6929 686.6929 l h f
+0 0 0 RG 1.2 w 56.6929 65.0000 m 340.1575 65.0000 l S
+0 0 0 RG 1.0 w 56.6929 61.0000 m 56.6929 69.0000 l S
+0 0 0 RG 1.0 w 340.1575 61.0000 m 340.1575 69.0000 l S
+0 0 0 rg BT /F1 9 Tf 56.69 48 Td (10.00 cm Verification Scale Bar - Check with physical ruler after printing) Tj ET
+Q
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000247 00000 n 
+0000000317 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1221
+%%EOF

@@ -1,0 +1,19 @@
+{
+  "image_filename": "09_border_and_red_calib.png",
+  "description": "Red calibration square, one valid interior leaf, and one leaf cut off by the right image border",
+  "width_px": 3000,
+  "height_px": 2000,
+  "true_px_per_cm": 100.0,
+  "calib_side_cm": 2.0,
+  "calib_color": "red",
+  "true_leaf_count": 1,
+  "true_total_pixels": 143931,
+  "true_area_cm2": 14.3931,
+  "per_leaf_areas_px": [
+    143931
+  ],
+  "per_leaf_areas_cm2": [
+    14.3931
+  ],
+  "expects_border_warning": true
+}

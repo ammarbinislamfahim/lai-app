@@ -1,0 +1,24 @@
+{
+  "image_filename": "05_brightness_gradient.png",
+  "description": "Standard shapes under uneven lighting gradient across X and Y axes",
+  "width_px": 3000,
+  "height_px": 2000,
+  "true_px_per_cm": 100.0,
+  "calib_side_cm": 2.0,
+  "calib_color": "blue",
+  "true_leaf_count": 4,
+  "true_total_pixels": 480464,
+  "true_area_cm2": 48.0464,
+  "per_leaf_areas_px": [
+    120000,
+    101765,
+    114768,
+    143931
+  ],
+  "per_leaf_areas_cm2": [
+    12.0,
+    10.1765,
+    11.4768,
+    14.3931
+  ]
+}

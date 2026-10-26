@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+title: "LeafArea & LAI Analyzer: Deterministic Scientific Leaf Surface Area and Leaf Area Index Pipeline"
+message: "If you use this software in your research, please cite it using the metadata below."
+type: software
+version: "1.5.6"
+date-released: "2026-10-26"
+license: MIT
+authors:
+  - name: "LeafArea & LAI Research Team"
+keywords:
+  - leaf area
+  - leaf area index
+  - LAI
+  - plant phenotyping
+  - image analysis
+  - OpenCV
+  - scientific software
+abstract: >-
+  A deterministic, zero-click desktop and web application that measures one-sided leaf
+  surface area (cm²) from full-resolution photos or flatbed scans and calculates the
+  Leaf Area Index (LAI), with automatic scale calibration, masked normalized-convolution
+  illumination correction, and explicit edge-uncertainty reporting.

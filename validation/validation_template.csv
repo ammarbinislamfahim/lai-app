@@ -1,0 +1,4 @@
+sample_id,imagej_total_area_cm2,app_total_area_cm2,difference_cm2,difference_percent,notes
+sample_01,48.0500,48.0464,-0.0036,-0.0075,Clean 4-leaf standard validation scan
+sample_02,21.2350,21.2305,-0.0045,-0.0212,Leaf with insect herbivory holes
+sample_03,31.4200,31.4172,-0.0028,-0.0089,Large 8x5 cm ovate leaf
