@@ -110,8 +110,11 @@ jobs:
           ls -lh "dist/LeafAreaAnalyzer-v${VER}-linux-x86_64.tar.gz"
 
       - name: Verify packaged Linux executable (test_packaged.py)
+        shell: bash
         run: |
-          env -i PATH=/usr/bin:/bin pytest tests/test_packaged.py -v -s | tee dist/packaged_test_linux.log
+          # The test itself launches the executable with a clean environment, so no `env -i` here.
+          # bash (with pipefail) + 2>&1 ensures failures are visible and the log is never empty.
+          pytest tests/test_packaged.py -v -s 2>&1 | tee dist/packaged_test_linux.log
 
       - name: Upload Linux artifacts
         uses: actions/upload-artifact@v4.4.3
@@ -151,8 +154,9 @@ jobs:
           (cd dist && zip -r "LeafAreaAnalyzer-v${VER}-macos.zip" LeafAreaAnalyzer)
 
       - name: Verify packaged macOS executable (test_packaged.py)
+        shell: bash
         run: |
-          pytest tests/test_packaged.py -v -s | tee dist/packaged_test_macos.log
+          pytest tests/test_packaged.py -v -s 2>&1 | tee dist/packaged_test_macos.log
 
       - name: Upload macOS artifacts
         uses: actions/upload-artifact@v4.4.3
