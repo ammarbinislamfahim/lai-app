@@ -307,6 +307,9 @@ def test_packaged_executable_end_to_end() -> None:
             for win_var in ("SYSTEMROOT", "WINDIR", "COMSPEC", "TEMP", "TMP", "LOCALAPPDATA", "USERPROFILE"):
                 if win_var in os.environ:
                     clean_env[win_var] = os.environ[win_var]
+            # POSIX-style PATH is meaningless on Windows; keep only the system directories.
+            sysroot = os.environ.get("SYSTEMROOT", r"C:\Windows")
+            clean_env["PATH"] = os.pathsep.join([rf"{sysroot}\System32", sysroot])
 
         proc = subprocess.Popen(
             [str(exe_path)],
@@ -451,4 +454,10 @@ def test_packaged_executable_end_to_end() -> None:
             except subprocess.TimeoutExpired:
                 proc.kill()
                 stdout_text, _ = proc.communicate()
-            assert f"Leaf Area & LAI Analyzer v{config.SOFTWARE_VERSION} is running at http://127.0.0.1:" in stdout_text
+            banner = f"Leaf Area & LAI Analyzer v{config.SOFTWARE_VERSION} is running at http://127.0.0.1:"
+            if sys.platform == "win32":
+                # The Windows build is windowed (console=False): it has no stdout, so the banner is only in app.log.
+                log_text = (user_data / "logs" / "app.log").read_text(encoding="utf-8", errors="replace")
+                assert banner in log_text
+            else:
+                assert banner in stdout_text

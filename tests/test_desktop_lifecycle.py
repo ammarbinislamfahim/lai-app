@@ -33,7 +33,7 @@ def _find_free_port() -> int:
 def _launcher_env(extra: dict[str, str]) -> dict[str, str]:
     env = os.environ.copy()
     existing_pp = env.get("PYTHONPATH", "")
-    env["PYTHONPATH"] = f"{PROJECT_ROOT}:{existing_pp}" if existing_pp else str(PROJECT_ROOT)
+    env["PYTHONPATH"] = f"{PROJECT_ROOT}{os.pathsep}{existing_pp}" if existing_pp else str(PROJECT_ROOT)
     env.update(extra)
     return env
 
@@ -344,12 +344,20 @@ def test_5_second_launch_opens_browser_with_port_and_exits(tmp_path: Path) -> No
 
     # Create a mock browser executable to capture arguments passed by launcher.py
     browser_log = tmp_path / "browser_invocations.txt"
-    mock_browser = tmp_path / "mock-chromium.sh"
-    mock_browser.write_text(
-        f"#!/usr/bin/env bash\necho \"$@\" >> \"{browser_log}\"\n",
-        encoding="utf-8",
-    )
-    mock_browser.chmod(0o755)
+    if sys.platform == "win32":
+        # A bash script cannot be executed by CreateProcess on Windows; use a .cmd batch file instead.
+        mock_browser = tmp_path / "mock-chromium.cmd"
+        mock_browser.write_text(
+            f'@echo off\r\necho %* >> "{browser_log}"\r\n',
+            encoding="utf-8",
+        )
+    else:
+        mock_browser = tmp_path / "mock-chromium.sh"
+        mock_browser.write_text(
+            f"#!/usr/bin/env bash\necho \"$@\" >> \"{browser_log}\"\n",
+            encoding="utf-8",
+        )
+        mock_browser.chmod(0o755)
 
     env1 = _launcher_env(
         {
