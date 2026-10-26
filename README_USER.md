@@ -18,7 +18,7 @@ Before installing, you can verify that your downloaded file is intact and unalte
 
 - **Linux (Terminal):**
   ```bash
-  sha256sum -c LeafAreaAnalyzer-v1.5.6-linux-x86_64.tar.gz.sha256
+  sha256sum -c SHA256SUMS.txt --ignore-missing
   ```
 
 ---
@@ -54,12 +54,12 @@ Before installing, you can verify that your downloaded file is intact and unalte
 
 Accurate leaf area measurement depends on an accurate physical scale ($\text{pixels per cm}$):
 
-1. Click **Download Blue A4 Calibration Sheet (PDF)** (or **Download Red A4 Calibration Sheet (PDF)** if you are measuring blue/dark-purple objects) in the top header of the app.
+1. Open the **Calibration sheets** menu in the top bar of the app and click **Download** next to the **Blue 2.00 cm sheet** (or the **Red 2.00 cm sheet** if you are measuring blue or dark-purple objects).
 2. In your PDF viewer's Print dialog, set **Page Sizing & Handling** to **100% / Actual Size** (`Scale = None`). **Do NOT select "Fit to Page" or "Shrink Oversized Pages"**, as that shrinks the square by 3–6%.
 3. **Mandatory Ruler Check:** After printing, take a millimeter ruler and measure:
    - The **10.00 cm Verification Scale Bar** at the bottom of the sheet—it must measure exactly **10.0 cm (100.0 mm)**.
    - The solid **Calibration Square**—it must measure exactly **2.00 cm × 2.00 cm (20.0 mm × 20.0 mm)**.
-   If your printer scaled the sheet slightly (for example, the square measures `1.96 cm`), simply enter `1.96` in the **Known Side Length (cm)** box in the app.
+   If your printer scaled the sheet slightly (for example, the square measures `1.96 cm`), simply enter `1.96` in the **Side length (cm)** box under **Calibration square** in the app.
 4. **One Square Per Photo:** Use **only one** calibration square per photo, and keep the other sheet's square out of the camera frame.
 
 ---
@@ -76,14 +76,15 @@ Accurate leaf area measurement depends on an accurate physical scale ($\text{pix
 ## 5. Running an Analysis & Reading the Results
 
 1. Drag and drop one or more leaf photos into the upload box (you can upload a batch of images from the same plot/sample together).
-2. Confirm your **Calibration Square Settings** (default `2.00 cm`, `Blue Square`).
-3. *(Optional)* To calculate **Leaf Area Index (LAI)**, choose:
-   - **Mode 1:** Enter the total ground area ($\text{m}^2$) represented by the harvested leaves, or
-   - **Mode 2:** Enter the **Number of Plants Sampled** and the **Ground Area per Plant ($\text{m}^2$)**.
-4. Click **Analyze Leaf Area & LAI**.
+2. Confirm the **Calibration square** settings (default side length `2.00 cm`, colour `Blue`).
+3. *(Optional)* To calculate **Leaf Area Index (LAI)**, choose a **Calculation mode**:
+   - **Ground area:** enter the total ground area ($\text{m}^2$) represented by the harvested leaves, or
+   - **Plants × area per plant:** enter the **Number of plants** and the **Area per plant ($\text{m}^2$)**.
+   - **Leaf area only** (default) skips LAI and reports areas in $\text{cm}^2$.
+4. Click **Analyze**.
 
 ### Reading the CSV and Excel (`.xlsx`) Exports
-Click **Download CSV** or **Download XLSX** to save a permanent spreadsheet record containing:
+Click **Download CSV** or **Download Excel** to save a permanent spreadsheet record containing:
 - **One row per detected leaf** (`Leaf_Number = 1, 2, ...`) with its exact `Leaf_Area_cm2`, `Pixel_Count`, `Length_cm`, `Width_cm`, `Perimeter_cm`, `Solidity`, `Centroid_X_px`, `Centroid_Y_px`, and `Possible_Touching_Leaves` (`Yes`/`No`), plus
 - **A final `TOTAL` row** summarizing the total leaf area, pixel count, and sample LAI,
 - Full audit metadata on every row: `Scale_px_per_cm`, `Scale_Area_px_per_cm`, `Scale_Edge_px_per_cm`, `Calibration_Method`, `Otsu_Threshold`, `Edge_Threshold`, `Confidence`, `Warnings`, `Software_Version` (`LeafArea & LAI Analyzer v1.5.6`), and `Date_Time_UTC`.
@@ -92,8 +93,8 @@ Click **Download CSV** or **Download XLSX** to save a permanent spreadsheet reco
 
 ## 6. Closing the App & Viewing Logs
 
-- **Automatic Shutdown:** Simply close the application window (or click the red **Quit** button in the top-right header). The background server stops automatically a few seconds after the window is closed.
-- **Viewing Diagnostic Logs:** Click **View Application Logs (`/api/logs/latest`)** in the page footer to view the latest 200 lines of `app.log` directly in your browser. Log files are stored in:
+- **Automatic Shutdown:** Simply close the application window (or click **Quit** in the top bar). The background server stops automatically a few seconds after the window is closed.
+- **Viewing Diagnostic Logs:** Click **Application log** in the page footer to view the latest 200 lines of `app.log` directly in your browser. Log files are stored in:
   - **Windows:** `%LOCALAPPDATA%\LeafAreaAnalyzer\logs\app.log`
   - **Linux:** `~/.local/share/LeafAreaAnalyzer/logs/app.log`
   - **macOS:** `~/Library/Application Support/LeafAreaAnalyzer/logs/app.log`
