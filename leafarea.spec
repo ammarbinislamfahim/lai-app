@@ -145,6 +145,10 @@ hiddenimports = [
 ]
 
 excludes = [
+    # Not used by the app; the bundled pkg_resources runtime hook crashes on Linux
+    # ("No module named 'backports'") with newer setuptools.
+    "pkg_resources",
+    "setuptools",
     "tkinter",
     "_tkinter",
     "matplotlib",
